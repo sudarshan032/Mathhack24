@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text to Text Chat</title>
+</head>
+<body>
+    <h1>Text to Text Chat</h1>
+    <form id="textToTextForm">
+        <label for="user_id">User ID:</label><br>
+        <input type="text" id="user_id" name="user_id" required><br>
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div id="response"></div>
+    <script>
+        document.getElementById('textToTextForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userId = document.getElementById('user_id').value;
+            const message = document.getElementById('message').value;
+            fetch('/texttotext', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id: userId, message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('response').innerText = `Error: ${data.error}`;
+                } else {
+                    document.getElementById('response').innerText = data.response;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

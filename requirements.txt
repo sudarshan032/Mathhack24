@@ -1,0 +1,7 @@
+transformers
+flask
+flask_cors
+werkzeug
+pathlib
+assemblyai
+openai

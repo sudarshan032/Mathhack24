@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text-to-Speech</title>
+</head>
+<body>
+    <h1>Text-to-Speech</h1>
+    <form id="ttsForm">
+        <label for="audio_message">Message:</label>
+        <textarea id="audio_message" name="audio_message"></textarea><br><br>
+        <button type="button" onclick="generateSpeech()">Generate Speech</button>
+    </form>
+    <p id="message"></p>
+
+    <audio id="speechAudio" controls></audio> <!-- Added controls attribute -->
+
+    <script>
+async function generateSpeech() {
+    const audio_message = document.getElementById('audio_message').value;
+
+    const response = await fetch('/tts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ audio_message: audio_message })
+    });
+
+    const data = await response.json(); // Parse the JSON response
+    if (data.file_path) {
+        const audioElement = document.getElementById('speechAudio');
+        audioElement.src = data.file_path + '?t=' + new Date().getTime(); // Add cache-busting parameter
+        audioElement.play(); // Auto-play the audio
+    } else {
+        document.getElementById('message').textContent = 'Error generating speech.';
+    }
+}
+    </script>
+</body>
+</html>

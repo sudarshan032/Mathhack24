@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Emotion Recognition</title>
+</head>
+<body>
+    <h1>Audio Emotion Recognition</h1>
+    <form id="audioForm" enctype="multipart/form-data">
+        <label for="file">Select audio file:</label>
+        <input type="file" id="file" name="file"><br><br>
+        <button type="button" onclick="uploadFile()">Upload</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('file');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/audioemotion', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
